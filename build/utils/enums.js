@@ -5,4 +5,9 @@ var RequestType;
     RequestType["ORDER"] = "ORDER";
     RequestType["INVENTORY"] = "INVENTORY";
 })(RequestType = exports.RequestType || (exports.RequestType = {}));
+var OrderStatus;
+(function (OrderStatus) {
+    OrderStatus["SHOPPING"] = "SHOPPING";
+    OrderStatus["APPROVED"] = "APPROVED";
+})(OrderStatus = exports.OrderStatus || (exports.OrderStatus = {}));
 //# sourceMappingURL=enums.js.map

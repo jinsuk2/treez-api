@@ -15,7 +15,9 @@ const PORT = 3000;
 const app = express();
 
 // TreezApi Init
-const treezApi = new TreezApi("mongodb://localhost:27017/treez_api_collection");
+const treezApi: TreezApi = new TreezApi(
+  "mongodb://localhost:27017/treez_api_collection"
+);
 
 // Apply Middlewares
 app.use(bodyParser.json({ type: "application/json" }));
@@ -33,7 +35,7 @@ app.options("/*", (req: Request, res: Response, next: NextFunction) => {
 });
 
 // Apply Routes
-const apiRoutes = routes(treezApi);
+const apiRoutes = treezApi.getRoutes();
 applyRoutes(apiRoutes, app);
 
 // Start

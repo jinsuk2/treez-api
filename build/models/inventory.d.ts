@@ -4,11 +4,14 @@ import { ExtractDoc, ExtractProps } from "ts-mongoose";
 declare const inventorySchema: import("mongoose").Schema<any> & {
     definition: {
         _id: import("mongoose").Types.ObjectId;
-        name?: string;
         id?: string;
-        description?: string;
-        price?: number;
+        name?: string;
         quantity?: number;
+        unitPrice?: number;
+        description?: string;
+        itemIds?: string[];
+        lastUpdated?: string;
+        active?: boolean;
         __v: number;
     };
     options: import("mongoose").SchemaOptions;
@@ -16,20 +19,26 @@ declare const inventorySchema: import("mongoose").Schema<any> & {
 declare const Inventory: import("mongoose").Model<import("mongoose").Document & {
     _id: import("mongoose").Types.ObjectId;
     __v: number;
-    name: string;
     id: string;
-    description: string;
-    price: number;
+    name: string;
     quantity: number;
+    unitPrice: number;
+    description: string;
+    itemIds: string[];
+    lastUpdated: string;
+    active: boolean;
 } & {}, {}> & {
     [name: string]: Function;
 };
 interface InventoryDetails {
     id: string;
     name: string;
-    description: string;
-    price: number;
     quantity: number;
+    unitPrice: number;
+    description: string;
+    lastUpdated: string;
+    active: boolean;
+    itemIds?: string[];
 }
 declare type InventoryDoc = ExtractDoc<typeof inventorySchema>;
 declare type InventoryProps = ExtractProps<typeof inventorySchema>;

@@ -6,22 +6,30 @@ import {
   ExtractProps
 } from "ts-mongoose";
 
+// Schema for a single Inventory Item
 const inventorySchema = createSchema({
   id: Type.string({ unique: true, index: true }),
-  name: Type.string(),
+  name: Type.string({ unique: true, index: true }),
+  quantity: Type.number({ default: 0 }),
+  unitPrice: Type.number({ default: 0 }),
   description: Type.string(),
-  price: Type.number(),
-  quantity: Type.number()
+  itemIds: Type.array({ default: [], index: false }).of(Type.string()),
+  lastUpdated: Type.string(),
+  active: Type.boolean({ default: true })
 });
 
-const Inventory = typedModel("Inventory", inventorySchema, "treez.inventories");
+const Inventory = typedModel("Inventory", inventorySchema, "treez.inventory");
 
+// TypeGuard for body in create/update reqs
 interface InventoryDetails {
   id: string;
   name: string;
-  description: string;
-  price: number;
   quantity: number;
+  unitPrice: number;
+  description: string;
+  lastUpdated: string;
+  active: boolean;
+  itemIds?: string[];
 }
 
 type InventoryDoc = ExtractDoc<typeof inventorySchema>;

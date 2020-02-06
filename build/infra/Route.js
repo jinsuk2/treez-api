@@ -8,6 +8,7 @@ class Route {
     }
 }
 exports.Route = Route;
+// Injects ApiRoutes to Express App
 exports.applyRoutes = (routes, router) => {
     for (const route of routes) {
         const { path, method, handler } = route;

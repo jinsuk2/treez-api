@@ -1,3 +1,3 @@
 import { Route } from "../infra/Route";
-import TreezApi from "../api";
-export declare const routes: (api: TreezApi) => Route[];
+import { InventoryController, OrderController } from "../controllers";
+export declare const routes: (inventoryController: InventoryController, orderController: OrderController) => Route[];

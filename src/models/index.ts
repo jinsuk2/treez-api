@@ -6,4 +6,6 @@ const models = {
   Order
 };
 
+export { Inventory };
+export { Order };
 export default models;

@@ -8,7 +8,6 @@ const bodyParser = require("body-parser");
 // API and Routes
 const api_1 = require("./api");
 const Route_1 = require("./infra/Route");
-const routes_1 = require("./routes/routes");
 // Express App Setup
 const PORT = 3000;
 const app = express();
@@ -25,7 +24,7 @@ app.options("/*", (req, res, next) => {
     res.sendStatus(200);
 });
 // Apply Routes
-const apiRoutes = routes_1.routes(treezApi);
+const apiRoutes = treezApi.getRoutes();
 Route_1.applyRoutes(apiRoutes, app);
 // Start
 const server = http.createServer(app);
