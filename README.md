@@ -37,8 +37,8 @@ npm run build
 ```
 
 ### Starting
-This app uses MongoDB as its Database and is currently set the location of DB to your local machine. (By Default, Mongo sets its path here `mongodb://localhost:27017/treez_api_collection`
-You can change to your own Mongo database by adding your MongoUri to the constructor of TreezApi. (Refer to main index.ts line 18-20)
+This app uses MongoDB as its Database and is currently set the location of DB to your local machine. (By Default, Mongo sets its path at: `mongodb://localhost:27017/treez_api_collection`.
+You can change to your own Mongo database by adding your MongoUri to the constructor of TreezApi. (Refer to [main App Starter](https://github.com/jinsukkim94/treez-api/blob/master/src/index.ts) line 18-20)
 
 Finally, to start the app:
 ```
