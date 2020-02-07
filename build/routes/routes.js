@@ -9,7 +9,7 @@ exports.routes = (inventoryController, orderController) => {
         // Create New Inventory Item
         new Route_1.Route("/inventories", "post", [
             async (req, res) => {
-                const { name, description, quantity, unitPrice } = req.body;
+                const { name, description = "No Description", quantity = 0, unitPrice = 0 } = req.body;
                 try {
                     // Name cannot be empty
                     if (!name) {
@@ -17,7 +17,7 @@ exports.routes = (inventoryController, orderController) => {
                     }
                     // Check if an Item with same name already exists.
                     const check = await MongoHandlers_1.getInventoryByName(name);
-                    if (!check) {
+                    if (check) {
                         throw new Error(`There already is an Item Named ${name}`);
                     }
                     // Generate Parameter to Create Inventory Item
@@ -237,6 +237,10 @@ exports.routes = (inventoryController, orderController) => {
                     // Handle Items Change and Update Inventory Stock
                     if (items.length > 0) {
                         total = await orderController.validateStock(items, total, finish);
+                    }
+                    else {
+                        // else keep original total
+                        total = order.total;
                     }
                     // Generate Parameters for Update Order
                     const payload = {

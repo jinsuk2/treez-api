@@ -5,6 +5,7 @@
   "main": "build/index.js",
   "scripts": {
     "build": "rimraf build &&./node_modules/.bin/tsc -p .",
+    "buildWin": "rimraf build && tsc",
     "debug": "node --inspect-brk ./build/app.js",
     "start": "node ./build/index.js",
     "test": "jest --coverage --verbose"

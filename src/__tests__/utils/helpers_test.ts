@@ -1,32 +1,31 @@
 import { stub, mock } from "sinon";
 import { v4 as uuid } from "uuid";
-import models from "../../models";
+import models, { Inventory } from "../../models";
+import { emptyGuard, updateStock } from "../../utils/helpers";
 
-let mockDriverFindOneAndUpdateMethod: any;
-let mockDriver: any;
-let mockIsLive: any;
-
-// let driversHandler: DriversHandler = new DriversHandler("", "", "", false);
 beforeEach(async () => {});
 
 afterEach(async () => {});
 
-describe("DriversProjection#handle", () => {
-  describe("Drivers Events", () => {
-    it("should create a helper account", async () => {
-      await console.log("hello");
-
-      // expect(mockDriverFindOneAndUpdateMethod.calledOnce).toBeTruthy();
-      // expect(mockDriverFindOneAndUpdateMethod.getCall(0).args).toEqual([
-      //   { id: "" },
-      //   {
-      //     id: ""
-      //   },
-      //   {
-      //     upsert: true,
-      //     setDefaultsOnInsert: true
-      //   }
-      // ]);
-    });
+describe("Helpers#", () => {
+  it("Should guard accordingly", async () => {
+    let bool: Boolean;
+    bool = emptyGuard([{}]);
+    expect(bool).toBeTruthy();
+    bool = emptyGuard([]);
+    expect(bool).toBeFalsy();
+    bool = emptyGuard(null);
+    expect(bool).toBeFalsy();
+  });
+  it("Should updateStock", async () => {
+    const id = uuid();
+    const update = await stub(Inventory, "findOneAndUpdate").resolves(null);
+    updateStock(id, 1);
+    const date = new Date().toISOString();
+    expect(update.callCount).toEqual(1);
+    expect(update.getCall(0).args).toEqual([
+      { id },
+      { quantity: 1, lastUpdated: date }
+    ]);
   });
 });

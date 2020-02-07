@@ -24,7 +24,12 @@ export const routes = (
     // Create New Inventory Item
     new Route("/inventories", "post", [
       async (req: Request, res: Response) => {
-        const { name, description, quantity, unitPrice } = req.body;
+        const {
+          name,
+          description = "No Description",
+          quantity = 0,
+          unitPrice = 0
+        } = req.body;
         try {
           // Name cannot be empty
           if (!name) {
@@ -33,7 +38,7 @@ export const routes = (
 
           // Check if an Item with same name already exists.
           const check: InventoryDoc = await getInventoryByName(name);
-          if (!check) {
+          if (check) {
             throw new Error(`There already is an Item Named ${name}`);
           }
 
@@ -270,6 +275,9 @@ export const routes = (
           // Handle Items Change and Update Inventory Stock
           if (items.length > 0) {
             total = await orderController.validateStock(items, total, finish);
+          } else {
+            // else keep original total
+            total = order.total;
           }
 
           // Generate Parameters for Update Order

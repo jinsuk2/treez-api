@@ -18,14 +18,11 @@ exports.createInventory = async (updateBody) => {
     return await models_1.Inventory.create(updateBody);
 };
 exports.deleteInventory = async (id, hardDelete) => {
+    if (!(await models_1.Inventory.findOne({ id: id }))) {
+        throw new Error(`Inventory with ${id} doesn't exist!`);
+    }
     if (hardDelete) {
-        await models_1.Inventory.deleteOne({ id: id })
-            .then((inven) => {
-            if (!inven.deletedCount) {
-                throw new Error(`Inventory Doesn't Exists. ID ${id}`);
-            }
-        })
-            .catch(e => {
+        await models_1.Inventory.deleteOne({ id: id }).catch(e => {
             throw new Error(`Could not Delete Inventory ${id} error: ${e.message}`);
         });
     }
@@ -46,14 +43,11 @@ exports.createOrder = async (updateBody) => {
     return await models_1.Order.create(updateBody);
 };
 exports.deleteOrder = async (id) => {
-    await models_1.Order.deleteOne({ id: id })
-        .catch(e => {
+    if (!(await models_1.Order.findOne(id))) {
+        throw new Error(`Order doesn't exist. ID: ${id}`);
+    }
+    await models_1.Order.deleteOne({ id: id }).catch(e => {
         throw new Error(`Could not Delete Order ${id}`);
-    })
-        .then((order) => {
-        if (!order.deletedCount) {
-            throw new Error(`Order doesn't exist. ID: ${id}`);
-        }
     });
     return id;
 };

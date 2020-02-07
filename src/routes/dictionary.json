@@ -1,0 +1,280 @@
+{
+  "info": {
+    "_postman_id": "cd86f938-d93c-40e6-83cb-fc603f42eb12",
+    "name": "treez_api",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Get Inventories",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "{{endpoint}}/inventories",
+          "host": ["{{endpoint}}"],
+          "path": ["inventories"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Inventory",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "name": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\"name\":\"item5\",\n\t\"quantity\": 10,\n\t\"unitPrice\": 30,\n\t\"description\": \"This is item3.\"\n}"
+        },
+        "url": {
+          "raw": "{{endpoint}}/inventories",
+          "host": ["{{endpoint}}"],
+          "path": ["inventories"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update Inventory",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "name": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\"quantity\": 0,\n\t\"unitPrice\": 0,\n\t\"description\": \"\"\n}"
+        },
+        "url": {
+          "raw": "{{endpoint}}/inventories/:id",
+          "host": ["{{endpoint}}"],
+          "path": ["inventories", ":id"],
+          "variable": [
+            {
+              "key": "id",
+              "value": "d284b6b4-17cd-49c9-ab00-eb6450864e91",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Inventory",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "name": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\"soft\": false\n}"
+        },
+        "url": {
+          "raw": "{{endpoint}}/inventories/:id",
+          "host": ["{{endpoint}}"],
+          "path": ["inventories", ":id"],
+          "variable": [
+            {
+              "key": "id",
+              "value": "d284b6b4-17cd-49c9-ab00-eb6450864e91",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Inventory By Id",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "{{endpoint}}/inventories/:id",
+          "host": ["{{endpoint}}"],
+          "path": ["inventories", ":id"],
+          "variable": [
+            {
+              "key": "id",
+              "value": "a91fe22f-aade-4b0b-b0ec-f93f6b8399cr",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Orders",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "{{endpoint}}/orders",
+          "host": ["{{endpoint}}"],
+          "path": ["orders"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Order",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "name": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\"email\": \"test2@email.com\",\n\t\"items\": [{\n\t\t\"name\": \"item2\",\n\t\t\"count\": 3\n\t},{\n\t\t\"name\": \"item3\",\n\t\t\"count\": 3\n\t},{\n\t\t\"name\": \"item4\",\n\t\t\"count\": 0\n\t}],\n\t\"finish\": true\n}"
+        },
+        "url": {
+          "raw": "{{endpoint}}/orders",
+          "host": ["{{endpoint}}"],
+          "path": ["orders"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update Order",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "name": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\"email\": \"test2@email.com\",\n\t\"items\": [{\n\t\t\"name\": \"item2\",\n\t\t\"count\": 2\n\t},{\n\t\t\"name\": \"item3\",\n\t\t\"count\": 2\n\t},{\n\t\t\"name\": \"item4\",\n\t\t\"count\": 1\n\t}]\n}"
+        },
+        "url": {
+          "raw": "{{endpoint}}/orders/:id",
+          "host": ["{{endpoint}}"],
+          "path": ["orders", ":id"],
+          "variable": [
+            {
+              "key": "id",
+              "value": "7482497c-bad3-4dd8-851e-cc3e6df73836",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Order",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "{{endpoint}}/orders/:id",
+          "host": ["{{endpoint}}"],
+          "path": ["orders", ":id"],
+          "variable": [
+            {
+              "key": "id",
+              "value": "1",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Order By Id",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "{{endpoint}}/orders/:id",
+          "host": ["{{endpoint}}"],
+          "path": ["orders", ":id"],
+          "variable": [
+            {
+              "key": "id",
+              "value": "bdc46b6b-0a0b-477a-a34e-c5fac586af25",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Restore Inventory",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "{{endpoint}}/inventories/restore/:id",
+          "host": ["{{endpoint}}"],
+          "path": ["inventories", "restore", ":id"],
+          "variable": [
+            {
+              "key": "id",
+              "value": "d284b6b4-17cd-49c9-ab00-eb6450864e91",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

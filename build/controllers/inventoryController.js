@@ -33,7 +33,7 @@ class InventoryController {
             const inven = await MongoHandlers_1.getInventory(id);
             // Guard for Empty Inventory
             if (!helpers_1.emptyGuard(inven)) {
-                throw new Error(`No Inventory Found for Id: ${id}`);
+                throw new Error(`No Inventory Found for ID: ${id}`);
             }
             const { quantity } = inven[0];
             // Warning msg for Non Empty item
@@ -48,9 +48,9 @@ class InventoryController {
             const inven = await MongoHandlers_1.getInventory(id);
             // Guard for Empty Inventory
             if (!helpers_1.emptyGuard(inven)) {
-                throw new Error(`No Inventory Found for Id: ${id}`);
+                throw new Error(`No Inventory Found for ID: ${id}`);
             }
-            const { name, quantity, description, unitPrice, active } = inven[0];
+            const { quantity, active } = inven[0];
             if (!active) {
                 throw new Error(`Inventory Item already Deleted`);
             }
@@ -69,7 +69,7 @@ class InventoryController {
         const inven = await MongoHandlers_1.getInventory(id);
         // Error Msg for No Match
         if (!helpers_1.emptyGuard(inven)) {
-            throw new Error(`No Inventory Found for Id: ${id}`);
+            throw new Error(`No Inventory Found for ID: ${id}`);
         }
         const { name, quantity, description, unitPrice, active } = inven[0];
         if (active) {

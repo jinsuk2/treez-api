@@ -48,7 +48,7 @@ export class InventoryController {
 
       // Guard for Empty Inventory
       if (!emptyGuard(inven)) {
-        throw new Error(`No Inventory Found for Id: ${id}`);
+        throw new Error(`No Inventory Found for ID: ${id}`);
       }
 
       const { quantity } = inven[0];
@@ -66,14 +66,15 @@ export class InventoryController {
 
       // Guard for Empty Inventory
       if (!emptyGuard(inven)) {
-        throw new Error(`No Inventory Found for Id: ${id}`);
+        throw new Error(`No Inventory Found for ID: ${id}`);
       }
 
-      const { name, quantity, description, unitPrice, active } = inven[0];
+      const { quantity, active } = inven[0];
 
       if (!active) {
         throw new Error(`Inventory Item already Deleted`);
       }
+
       // Warning msg for Non Empty item
       if (quantity > 0) {
         console.warn(`Inventory still has ${quantity} items`);
@@ -97,7 +98,7 @@ export class InventoryController {
 
     // Error Msg for No Match
     if (!emptyGuard(inven)) {
-      throw new Error(`No Inventory Found for Id: ${id}`);
+      throw new Error(`No Inventory Found for ID: ${id}`);
     }
 
     const { name, quantity, description, unitPrice, active } = inven[0];
@@ -105,6 +106,7 @@ export class InventoryController {
     if (active) {
       throw new Error(`Inventory Item already Restored`);
     }
+
     // Warning msg for Non Empty item
     if (quantity > 0) {
       console.warn(`Inventory is still has ${quantity} items`);

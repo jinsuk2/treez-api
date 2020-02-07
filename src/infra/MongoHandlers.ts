@@ -34,16 +34,13 @@ export const deleteInventory = async (
   id: string,
   hardDelete?: boolean
 ): Promise<string> => {
+  if (!(await Inventory.findOne({ id: id }))) {
+    throw new Error(`Inventory with ${id} doesn't exist!`);
+  }
   if (hardDelete) {
-    await Inventory.deleteOne({ id: id })
-      .then((inven: any) => {
-        if (!inven.deletedCount) {
-          throw new Error(`Inventory Doesn't Exists. ID ${id}`);
-        }
-      })
-      .catch(e => {
-        throw new Error(`Could not Delete Inventory ${id} error: ${e.message}`);
-      });
+    await Inventory.deleteOne({ id: id }).catch(e => {
+      throw new Error(`Could not Delete Inventory ${id} error: ${e.message}`);
+    });
   } else
     await Inventory.findOneAndUpdate({ id: id }, { active: false }).catch(e => {
       throw new Error(`Could not Delete Inventory ${id} error: ${e.message}`);
@@ -68,15 +65,12 @@ export const createOrder = async (updateBody: OrderDetails) => {
 };
 
 export const deleteOrder = async (id: string) => {
-  await Order.deleteOne({ id: id })
-    .catch(e => {
-      throw new Error(`Could not Delete Order ${id}`);
-    })
-    .then((order: any) => {
-      if (!order.deletedCount) {
-        throw new Error(`Order doesn't exist. ID: ${id}`);
-      }
-    });
+  if (!(await Order.findOne(id))) {
+    throw new Error(`Order doesn't exist. ID: ${id}`);
+  }
+  await Order.deleteOne({ id: id }).catch(e => {
+    throw new Error(`Could not Delete Order ${id}`);
+  });
   return id;
 };
 
