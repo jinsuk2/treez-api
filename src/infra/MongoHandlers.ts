@@ -5,11 +5,14 @@ import { OrderDetails, OrderDoc } from "../models/order";
 
 // Collection of CRUD functions for Easy Referencing
 // Inventory
-export const getInventory = async (
-  id?: string,
-  name?: string
-): Promise<InventoryDoc[]> => {
-  return await Inventory.find(id ? { id: id } : name ? { name: name } : {});
+export const getInventory = async (id?: string): Promise<InventoryDoc[]> => {
+  return await Inventory.find(id ? { id: id } : {});
+};
+
+export const getInventoryByName = async (
+  name: string
+): Promise<InventoryDoc> => {
+  return await Inventory.findOne({ name: name });
 };
 
 export const updateInventory = async (
@@ -31,13 +34,20 @@ export const deleteInventory = async (
   id: string,
   hardDelete?: boolean
 ): Promise<string> => {
-  try {
-    hardDelete
-      ? await Inventory.findOneAndDelete({ id: id })
-      : await Inventory.findOneAndUpdate({ id: id }, { active: false });
-  } catch (e) {
-    throw new Error(`Could not Delete Inventory ${id}`);
-  }
+  if (hardDelete) {
+    await Inventory.deleteOne({ id: id })
+      .then((inven: any) => {
+        if (!inven.deletedCount) {
+          throw new Error(`Inventory Doesn't Exists. ID ${id}`);
+        }
+      })
+      .catch(e => {
+        throw new Error(`Could not Delete Inventory ${id} error: ${e.message}`);
+      });
+  } else
+    await Inventory.findOneAndUpdate({ id: id }, { active: false }).catch(e => {
+      throw new Error(`Could not Delete Inventory ${id} error: ${e.message}`);
+    });
   return id;
 };
 
@@ -58,10 +68,28 @@ export const createOrder = async (updateBody: OrderDetails) => {
 };
 
 export const deleteOrder = async (id: string) => {
-  try {
-    await Order.findByIdAndDelete({ id: id });
-  } catch (e) {
-    throw new Error(`Could not Delete Order ${id}`);
-  }
+  await Order.deleteOne({ id: id })
+    .catch(e => {
+      throw new Error(`Could not Delete Order ${id}`);
+    })
+    .then((order: any) => {
+      if (!order.deletedCount) {
+        throw new Error(`Order doesn't exist. ID: ${id}`);
+      }
+    });
   return id;
 };
+
+const handlers = {
+  getInventory,
+  getInventoryByName,
+  updateInventory,
+  createInventory,
+  deleteInventory,
+  getOrder,
+  updateOrder,
+  createOrder,
+  deleteOrder
+};
+
+export default handlers;

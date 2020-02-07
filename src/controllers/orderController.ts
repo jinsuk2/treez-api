@@ -1,116 +1,106 @@
 import { OrderDoc, OrderDetails } from "../models/order";
-import { InventoryDoc, InventoryDetails } from "../models/inventory";
+import { InventoryDoc, InventoryDetails, Inventory } from "../models/inventory";
 import {
   getOrder,
   updateOrder,
   getInventory,
-  updateInventory
+  updateInventory,
+  getInventoryByName
 } from "../infra/MongoHandlers";
 import { OrderStatus } from "../utils/enums";
+import { emptyGuard, updateStock } from "../utils/helpers";
 
 export class OrderController {
-  // add/remove items from order
-  // requires orderId and itemId, Optional: new count
-  // NOTE: Default will be increment/decrement
-  public async updateOrderItems(
-    id: string,
-    itemId: string,
-    count: number
-  ): Promise<any> {
-    let tempTotal: number = 0;
-    // Grab Order, Item to be updated
-    const order: OrderDoc[] = await getOrder(id);
-    const item: InventoryDoc[] = await getInventory(itemId);
-
-    // Guard for Order, Item
-    if (!this.emptyGuard(order)) {
-      throw new Error(`No Order Found for Id: ${id}`);
-    } else if (!this.emptyGuard(item)) {
-      throw new Error(`No Item Found for Id: ${itemId}`);
-    }
-
-    const { email, items, status, total, orderDatePlaced } = order[0];
-    const { name, description, active, quantity, unitPrice } = item[0];
-
-    if (quantity - count < 0) {
-      throw new Error(
-        `We Are Out Of Stock! Try this number: ${quantity - count}`
-      );
-    }
-
-    let newItems: any[];
-
-    if (count > 0) {
-      newItems = items.map(item => {
-        if (item.id === itemId) {
-          item.count = count;
-        } else {
-          items.push({ itemId, itemName: name, count });
-        }
-        tempTotal = count * unitPrice;
+  // Validates If Inventory has enough Items
+  // For the Order and Update If Client is
+  // Finishing the Order.
+  public async validateStock(
+    newItems: any[],
+    curr: number,
+    finish: boolean
+  ): Promise<number> {
+    let total: number = curr;
+    // Handle Each Item in the Order ItemList
+    const payload = await newItems.map(async item => {
+      return await this.createPromise(item, total, finish);
+    });
+    const result: number = await Promise.all(payload)
+      .then(
+        async (results: number[]) =>
+          await results.reduce((prev: number, curr: number) => prev + curr)
+      )
+      .catch(e => {
+        console.log(e, "last");
+        throw new Error(e);
       });
-    } else if (count < 0) {
-      newItems = items.map(item => {
-        // TODO Here
-        // if (item.id === itemId) {
-        //   item.count
-        // }
-      });
-    }
-
-    // Create Guarded Payload with details
-    const payload: OrderDetails = {
-      id,
-      email,
-      items: newItems,
-      status,
-      total: total + tempTotal,
-      orderDatePlaced
-    };
-
-    const inventoryPayload: InventoryDetails = {
-      id: itemId,
-      name,
-      quantity: quantity - count,
-      unitPrice,
-      lastUpdated: new Date().toISOString(),
-      description,
-      active
-    };
-
-    return { payload, inventoryPayload };
-    // // Update Order with Payload
-    // await updateOrder(id, payload).catch(e => {
-    //   return `Couldn't update Order ID: ${id} Message: ${e.message}`;
-    // });
-    // // Update Inventory with the count
-    // await updateInventory(itemId, inventoryPayload).catch(e => {
-    //   throw new Error(`Couldn't update Item ID: ${id} Message: ${e.message}`);
-    // });
-    // return `Successfully updated Order ID: ${id} to : ${count}`;
+    return result;
   }
 
+  // Called when Client is Finishing The Order
   public async finishOrder(id: string): Promise<any> {
     const order: OrderDoc[] = await getOrder(id);
-    if (!this.emptyGuard(order)) {
+    // Error Msg for No Match
+    if (!emptyGuard(order)) {
       throw new Error(`No Order Found for Id: ${id}`);
     }
-    const { email, items, status, total } = order[0];
+
+    // Generate Payload accordingly
+    const date = new Date().toISOString();
+    const { email, items, total } = order[0];
     const payload: OrderDetails = {
       id,
       email,
       items,
       status: OrderStatus.APPROVED,
       total,
-      orderDatePlaced: new Date().toISOString()
+      lastUpdated: date,
+      orderDatePlaced: date
     };
 
     return payload;
   }
-  // Guard for empty Inventories
-  private emptyGuard = (order: any[]): boolean => {
-    if (!order || order.length <= 0) {
-      return false;
-    } else return true;
-  };
+
+  private async createPromise(item: any, total: number, finish: boolean) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const { name, count } = item;
+
+        // Name or Count cannot be Empty If Items are Provided
+        if (!name || (!count && count < 0)) {
+          throw new Error(`Missing Name and Count of the Item`);
+        }
+
+        const inventory: any = await getInventoryByName(name);
+        // Error Msg for Faulty Item in Order ItemList
+        if (!inventory) {
+          throw new Error(
+            `This Item does not exist in Inventory. Name: ${name}`
+          );
+        }
+
+        const { id, quantity, unitPrice } = inventory;
+
+        // Error Msg if Inventory cannot handle the order
+        if (quantity - count < 0) {
+          throw new Error(
+            `We don't have enough of this item. Try ${quantity} or less. Name: ${name}`
+          );
+        }
+
+        if (quantity - count == 0) {
+          console.warn("This item is now Out-of-Stock");
+        }
+
+        total += unitPrice * count;
+
+        // Update the DB for Inventory if Client is finishing the Order
+        if (finish) {
+          await updateStock(id, quantity - count);
+        }
+        resolve(total);
+      } catch (e) {
+        reject(e.message);
+      }
+    });
+  }
 }

@@ -3,8 +3,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const models_1 = require("../models");
 // Collection of CRUD functions for Easy Referencing
 // Inventory
-exports.getInventory = async (id, name) => {
-    return await models_1.Inventory.find(id ? { id: id } : name ? { name: name } : {});
+exports.getInventory = async (id) => {
+    return await models_1.Inventory.find(id ? { id: id } : {});
+};
+exports.getInventoryByName = async (name) => {
+    return await models_1.Inventory.findOne({ name: name });
 };
 exports.updateInventory = async (id, updateBody) => {
     return await models_1.Inventory.findOneAndUpdate({ id: id }, updateBody, {
@@ -15,14 +18,21 @@ exports.createInventory = async (updateBody) => {
     return await models_1.Inventory.create(updateBody);
 };
 exports.deleteInventory = async (id, hardDelete) => {
-    try {
-        hardDelete
-            ? await models_1.Inventory.findOneAndDelete({ id: id })
-            : await models_1.Inventory.findOneAndUpdate({ id: id }, { active: false });
+    if (hardDelete) {
+        await models_1.Inventory.deleteOne({ id: id })
+            .then((inven) => {
+            if (!inven.deletedCount) {
+                throw new Error(`Inventory Doesn't Exists. ID ${id}`);
+            }
+        })
+            .catch(e => {
+            throw new Error(`Could not Delete Inventory ${id} error: ${e.message}`);
+        });
     }
-    catch (e) {
-        throw new Error(`Could not Delete Inventory ${id}`);
-    }
+    else
+        await models_1.Inventory.findOneAndUpdate({ id: id }, { active: false }).catch(e => {
+            throw new Error(`Could not Delete Inventory ${id} error: ${e.message}`);
+        });
     return id;
 };
 // Order
@@ -36,12 +46,27 @@ exports.createOrder = async (updateBody) => {
     return await models_1.Order.create(updateBody);
 };
 exports.deleteOrder = async (id) => {
-    try {
-        await models_1.Order.findByIdAndDelete({ id: id });
-    }
-    catch (e) {
+    await models_1.Order.deleteOne({ id: id })
+        .catch(e => {
         throw new Error(`Could not Delete Order ${id}`);
-    }
+    })
+        .then((order) => {
+        if (!order.deletedCount) {
+            throw new Error(`Order doesn't exist. ID: ${id}`);
+        }
+    });
     return id;
 };
+const handlers = {
+    getInventory: exports.getInventory,
+    getInventoryByName: exports.getInventoryByName,
+    updateInventory: exports.updateInventory,
+    createInventory: exports.createInventory,
+    deleteInventory: exports.deleteInventory,
+    getOrder: exports.getOrder,
+    updateOrder: exports.updateOrder,
+    createOrder: exports.createOrder,
+    deleteOrder: exports.deleteOrder
+};
+exports.default = handlers;
 //# sourceMappingURL=MongoHandlers.js.map

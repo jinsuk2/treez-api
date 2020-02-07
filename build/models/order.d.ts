@@ -5,6 +5,7 @@ declare const orderSchema: import("mongoose").Schema<any> & {
     definition: {
         _id: import("mongoose").Types.ObjectId;
         id?: string;
+        lastUpdated?: string;
         email?: string;
         status?: string;
         items?: import("ts-mongoose/types/_shared").SubDocumentArray<{
@@ -24,6 +25,7 @@ declare const Order: import("mongoose").Model<import("mongoose").Document & {
     _id: import("mongoose").Types.ObjectId;
     __v: number;
     id: string;
+    lastUpdated: string;
     email: string;
     status: string;
     items: import("ts-mongoose/types/_shared").SubDocumentArray<{
@@ -44,6 +46,7 @@ interface OrderDetails {
     items: any[];
     status: string;
     total: number;
+    lastUpdated: string;
     orderDatePlaced?: string;
 }
 declare type OrderDoc = ExtractDoc<typeof orderSchema>;

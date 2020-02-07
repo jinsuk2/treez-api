@@ -1,5 +1,5 @@
 export declare class OrderController {
-    updateOrderItems(id: string, itemId: string, count: number): Promise<any>;
+    validateStock(newItems: any[], curr: number, finish: boolean): Promise<number>;
     finishOrder(id: string): Promise<any>;
-    private emptyGuard;
+    private createPromise;
 }

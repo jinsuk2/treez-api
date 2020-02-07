@@ -8,6 +8,7 @@ const inventorySchema = ts_mongoose_1.createSchema({
     quantity: ts_mongoose_1.Type.number({ default: 0 }),
     unitPrice: ts_mongoose_1.Type.number({ default: 0 }),
     description: ts_mongoose_1.Type.string(),
+    // Optional: if Items require Heavy Details, switch ID[] to Item[]
     itemIds: ts_mongoose_1.Type.array({ default: [], index: false }).of(ts_mongoose_1.Type.string()),
     lastUpdated: ts_mongoose_1.Type.string(),
     active: ts_mongoose_1.Type.boolean({ default: true })

@@ -1,33 +1,25 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const MongoHandlers_1 = require("../infra/MongoHandlers");
+const inventory_1 = require("../models/inventory");
+const helpers_1 = require("../utils/helpers");
 class InventoryController {
-    constructor() {
-        // Guard for empty Inventories
-        this.emptyGuard = (inven) => {
-            if (!inven || inven.length <= 0) {
-                return false;
-            }
-            else
-                return true;
-        };
-    }
     // Main Update Function
     // Handles Changes according to the Params given
-    async editInventory(id, name, description, unitPrice, quantity) {
+    async editInventoryProcesser(id, name, description, unitPrice, quantity) {
         const inven = await MongoHandlers_1.getInventory(id);
-        if (!this.emptyGuard(inven)) {
+        // Error Msg for No Match
+        if (!helpers_1.emptyGuard(inven)) {
             throw new Error(`No Inventory Found for ID: ${id}`);
         }
         const item = inven[0];
+        // Generate Payload to Update
         const payload = {
             id,
             name: name ? name : item.name,
             description: description ? description : item.description,
-            unitPrice: unitPrice ? unitPrice : item.unitPrice,
-            quantity: quantity
-                ? this.updateQuantity(item.quantity, quantity)
-                : item.quantity,
+            unitPrice,
+            quantity,
             active: item.active,
             lastUpdated: new Date().toISOString()
         };
@@ -38,33 +30,36 @@ class InventoryController {
     async deleteItem(id, hardDelete) {
         // Hard Delete Option
         if (hardDelete) {
-            return await MongoHandlers_1.deleteInventory(id, hardDelete).catch(e => {
-                throw new Error(`Couldn't Delete Inventory ID: ${id}. Message: ${e.message}`);
-            });
+            const inven = await MongoHandlers_1.getInventory(id);
+            // Guard for Empty Inventory
+            if (!helpers_1.emptyGuard(inven)) {
+                throw new Error(`No Inventory Found for Id: ${id}`);
+            }
+            const { quantity } = inven[0];
+            // Warning msg for Non Empty item
+            if (quantity > 0) {
+                console.warn(`Inventory still has ${quantity} items`);
+            }
+            return await MongoHandlers_1.deleteInventory(id, hardDelete);
         }
         else {
+            // Soft Delete Option
             // Grabs Inventory of Id
             const inven = await MongoHandlers_1.getInventory(id);
             // Guard for Empty Inventory
-            if (!this.emptyGuard(inven)) {
+            if (!helpers_1.emptyGuard(inven)) {
                 throw new Error(`No Inventory Found for Id: ${id}`);
             }
-            const { name, quantity, description, unitPrice } = inven[0];
+            const { name, quantity, description, unitPrice, active } = inven[0];
+            if (!active) {
+                throw new Error(`Inventory Item already Deleted`);
+            }
             // Warning msg for Non Empty item
             if (quantity > 0) {
-                console.warn(`Inventory is still has ${quantity} items`);
+                console.warn(`Inventory still has ${quantity} items`);
             }
-            // Create Guarded Payload with details
-            const payload = {
-                id,
-                name,
-                quantity,
-                unitPrice,
-                lastUpdated: new Date().toISOString(),
-                description,
-                active: false
-            };
-            return payload;
+            const result = await inventory_1.Inventory.findOneAndUpdate({ id: id }, { active: false }, { new: true });
+            return result;
         }
     }
     // restore an inventory
@@ -72,10 +67,14 @@ class InventoryController {
     async restoreInventory(id) {
         // Grabs Inventory of Id
         const inven = await MongoHandlers_1.getInventory(id);
-        if (!this.emptyGuard(inven)) {
+        // Error Msg for No Match
+        if (!helpers_1.emptyGuard(inven)) {
             throw new Error(`No Inventory Found for Id: ${id}`);
         }
-        const { name, quantity, description, unitPrice } = inven[0];
+        const { name, quantity, description, unitPrice, active } = inven[0];
+        if (active) {
+            throw new Error(`Inventory Item already Restored`);
+        }
         // Warning msg for Non Empty item
         if (quantity > 0) {
             console.warn(`Inventory is still has ${quantity} items`);
@@ -91,12 +90,6 @@ class InventoryController {
             active: true
         };
         return payload;
-    }
-    // update quantity of an item
-    updateQuantity(quantity, count) {
-        let change = count ? count : 0;
-        const total = change ? change : quantity + 1;
-        return total;
     }
 }
 exports.InventoryController = InventoryController;

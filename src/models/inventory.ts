@@ -13,6 +13,7 @@ const inventorySchema = createSchema({
   quantity: Type.number({ default: 0 }),
   unitPrice: Type.number({ default: 0 }),
   description: Type.string(),
+  // Optional: if Items require Heavy Details, switch ID[] to Item[]
   itemIds: Type.array({ default: [], index: false }).of(Type.string()),
   lastUpdated: Type.string(),
   active: Type.boolean({ default: true })

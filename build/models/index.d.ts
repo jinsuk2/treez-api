@@ -21,6 +21,7 @@ declare const models: {
         _id: import("mongoose").Types.ObjectId;
         __v: number;
         id: string;
+        lastUpdated: string;
         email: string;
         status: string;
         items: import("ts-mongoose/types/_shared").SubDocumentArray<{

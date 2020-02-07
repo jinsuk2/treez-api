@@ -6,14 +6,16 @@ import {
   ExtractProps
 } from "ts-mongoose";
 import { orderItemSchema } from "./item";
+import { OrderStatus } from "../utils/enums";
 
 // Schema for a single Order created by a customer
 const orderSchema = createSchema({
   id: Type.string({ unique: true, index: true }),
   email: Type.string(),
-  status: Type.string({ default: "SHOPPING" }),
+  status: Type.string({ default: OrderStatus.SHOPPING }),
   items: Type.array({ default: [], index: false }).of(orderItemSchema),
   total: Type.number({ default: 0 }),
+  lastUpdated: Type.string(),
   orderDatePlaced: Type.string()
 });
 
@@ -26,6 +28,7 @@ interface OrderDetails {
   items: any[];
   status: string;
   total: number;
+  lastUpdated: string;
   orderDatePlaced?: string;
 }
 
