@@ -6,8 +6,8 @@ declare const models: {
     Inventory: import("mongoose").Model<import("mongoose").Document & {
         _id: import("mongoose").Types.ObjectId;
         __v: number;
-        id: string;
         name: string;
+        id: string;
         quantity: number;
         unitPrice: number;
         description: string;
@@ -28,8 +28,7 @@ declare const models: {
             _id: import("mongoose").Types.ObjectId;
             count: number;
             __v: number;
-            itemId: string;
-            itemName: string;
+            name: string;
         } & {} & import("ts-mongoose/types/_shared").SubDocument>;
         total: number;
         orderDatePlaced: string;

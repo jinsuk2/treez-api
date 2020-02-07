@@ -4,8 +4,8 @@ import { ExtractDoc, ExtractProps } from "ts-mongoose";
 declare const inventorySchema: import("mongoose").Schema<any> & {
     definition: {
         _id: import("mongoose").Types.ObjectId;
-        id?: string;
         name?: string;
+        id?: string;
         quantity?: number;
         unitPrice?: number;
         description?: string;
@@ -19,8 +19,8 @@ declare const inventorySchema: import("mongoose").Schema<any> & {
 declare const Inventory: import("mongoose").Model<import("mongoose").Document & {
     _id: import("mongoose").Types.ObjectId;
     __v: number;
-    id: string;
     name: string;
+    id: string;
     quantity: number;
     unitPrice: number;
     description: string;

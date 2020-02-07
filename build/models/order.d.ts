@@ -12,8 +12,7 @@ declare const orderSchema: import("mongoose").Schema<any> & {
             _id: import("mongoose").Types.ObjectId;
             count: number;
             __v: number;
-            itemId: string;
-            itemName: string;
+            name: string;
         } & {} & import("ts-mongoose/types/_shared").SubDocument>;
         total?: number;
         orderDatePlaced?: string;
@@ -32,8 +31,7 @@ declare const Order: import("mongoose").Model<import("mongoose").Document & {
         _id: import("mongoose").Types.ObjectId;
         count: number;
         __v: number;
-        itemId: string;
-        itemName: string;
+        name: string;
     } & {} & import("ts-mongoose/types/_shared").SubDocument>;
     total: number;
     orderDatePlaced: string;

@@ -5,8 +5,8 @@ import { OrderDetails } from "../models/order";
 export declare const getInventory: (id?: string) => Promise<import("ts-mongoose").ExtractDoc<import("mongoose").Schema<any> & {
     definition: {
         _id: import("mongoose").Types.ObjectId;
-        id?: string;
         name?: string;
+        id?: string;
         quantity?: number;
         unitPrice?: number;
         description?: string;
@@ -20,8 +20,8 @@ export declare const getInventory: (id?: string) => Promise<import("ts-mongoose"
 export declare const getInventoryByName: (name: string) => Promise<import("ts-mongoose").ExtractDoc<import("mongoose").Schema<any> & {
     definition: {
         _id: import("mongoose").Types.ObjectId;
-        id?: string;
         name?: string;
+        id?: string;
         quantity?: number;
         unitPrice?: number;
         description?: string;
@@ -35,8 +35,8 @@ export declare const getInventoryByName: (name: string) => Promise<import("ts-mo
 export declare const updateInventory: (id: string, updateBody: InventoryDetails) => Promise<import("ts-mongoose").ExtractDoc<import("mongoose").Schema<any> & {
     definition: {
         _id: import("mongoose").Types.ObjectId;
-        id?: string;
         name?: string;
+        id?: string;
         quantity?: number;
         unitPrice?: number;
         description?: string;
@@ -50,8 +50,8 @@ export declare const updateInventory: (id: string, updateBody: InventoryDetails)
 export declare const createInventory: (updateBody: InventoryDetails) => Promise<import("ts-mongoose").ExtractDoc<import("mongoose").Schema<any> & {
     definition: {
         _id: import("mongoose").Types.ObjectId;
-        id?: string;
         name?: string;
+        id?: string;
         quantity?: number;
         unitPrice?: number;
         description?: string;
@@ -74,8 +74,7 @@ export declare const getOrder: (id?: string) => Promise<import("ts-mongoose").Ex
             _id: import("mongoose").Types.ObjectId;
             count: number;
             __v: number;
-            itemId: string;
-            itemName: string;
+            name: string;
         } & {} & import("ts-mongoose/types/_shared").SubDocument>;
         total?: number;
         orderDatePlaced?: string;
@@ -94,8 +93,7 @@ export declare const updateOrder: (id: string, updateBody: OrderDetails) => Prom
             _id: import("mongoose").Types.ObjectId;
             count: number;
             __v: number;
-            itemId: string;
-            itemName: string;
+            name: string;
         } & {} & import("ts-mongoose/types/_shared").SubDocument>;
         total?: number;
         orderDatePlaced?: string;
@@ -114,8 +112,7 @@ export declare const createOrder: (updateBody: OrderDetails) => Promise<import("
         _id: import("mongoose").Types.ObjectId;
         count: number;
         __v: number;
-        itemId: string;
-        itemName: string;
+        name: string;
     } & {} & import("ts-mongoose/types/_shared").SubDocument>;
     total: number;
     orderDatePlaced: string;
@@ -125,8 +122,8 @@ declare const handlers: {
     getInventory: (id?: string) => Promise<import("ts-mongoose").ExtractDoc<import("mongoose").Schema<any> & {
         definition: {
             _id: import("mongoose").Types.ObjectId;
-            id?: string;
             name?: string;
+            id?: string;
             quantity?: number;
             unitPrice?: number;
             description?: string;
@@ -140,8 +137,8 @@ declare const handlers: {
     getInventoryByName: (name: string) => Promise<import("ts-mongoose").ExtractDoc<import("mongoose").Schema<any> & {
         definition: {
             _id: import("mongoose").Types.ObjectId;
-            id?: string;
             name?: string;
+            id?: string;
             quantity?: number;
             unitPrice?: number;
             description?: string;
@@ -155,8 +152,8 @@ declare const handlers: {
     updateInventory: (id: string, updateBody: InventoryDetails) => Promise<import("ts-mongoose").ExtractDoc<import("mongoose").Schema<any> & {
         definition: {
             _id: import("mongoose").Types.ObjectId;
-            id?: string;
             name?: string;
+            id?: string;
             quantity?: number;
             unitPrice?: number;
             description?: string;
@@ -170,8 +167,8 @@ declare const handlers: {
     createInventory: (updateBody: InventoryDetails) => Promise<import("ts-mongoose").ExtractDoc<import("mongoose").Schema<any> & {
         definition: {
             _id: import("mongoose").Types.ObjectId;
-            id?: string;
             name?: string;
+            id?: string;
             quantity?: number;
             unitPrice?: number;
             description?: string;
@@ -194,8 +191,7 @@ declare const handlers: {
                 _id: import("mongoose").Types.ObjectId;
                 count: number;
                 __v: number;
-                itemId: string;
-                itemName: string;
+                name: string;
             } & {} & import("ts-mongoose/types/_shared").SubDocument>;
             total?: number;
             orderDatePlaced?: string;
@@ -214,8 +210,7 @@ declare const handlers: {
                 _id: import("mongoose").Types.ObjectId;
                 count: number;
                 __v: number;
-                itemId: string;
-                itemName: string;
+                name: string;
             } & {} & import("ts-mongoose/types/_shared").SubDocument>;
             total?: number;
             orderDatePlaced?: string;
@@ -234,8 +229,7 @@ declare const handlers: {
             _id: import("mongoose").Types.ObjectId;
             count: number;
             __v: number;
-            itemId: string;
-            itemName: string;
+            name: string;
         } & {} & import("ts-mongoose/types/_shared").SubDocument>;
         total: number;
         orderDatePlaced: string;
